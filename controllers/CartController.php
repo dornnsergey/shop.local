@@ -36,3 +36,24 @@ function removefromcartAction()
     }
     echo json_encode($resData);
 }
+
+function indexAction(Smarty $smarty, PDO $db)
+{
+    $productsIds = $_SESSION['cart'] ?? [];
+
+
+    $rsCategories = getAllMainCatsWithChildren($db);
+    $rsProducts = null;
+    if (!empty($productsIds)) {
+        $rsProducts = getProductsFromArray($productsIds, $db);
+    }
+
+
+    $smarty->assign('pageTitle', 'Корзина');
+    $smarty->assign('rsCategories', $rsCategories);
+    $smarty->assign('rsProducts', $rsProducts);
+
+    loadTemplate($smarty, 'header');
+    loadTemplate($smarty, 'cart');
+    loadTemplate($smarty, 'footer');
+}

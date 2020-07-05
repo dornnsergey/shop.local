@@ -30,3 +30,14 @@ function getProductById(PDO $db, $productId)
     $rs = $db->query($sql);
     return $rs->fetch(2);
 }
+
+function getProductsFromArray(array $productsIds, PDO $db)
+{
+    $strIds = implode(', ', $productsIds);
+    $sql = "SELECT * FROM products
+            WHERE id IN ({$strIds})";
+
+    $rs = $db->query($sql);
+
+    return $rs->fetchAll(2);
+}
