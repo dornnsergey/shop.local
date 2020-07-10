@@ -11,16 +11,34 @@
             {/foreach}
     </div>
 
-    <div id="userBox" class="hideme">
-        <a href="#" id="userLink"></a><br />
-        <a href="/user/logout/" onclick="logout();">Выход</a>
+    {if isset($arUser)}
+    <div id="userBox">
+        <a href="#" id="userLink">{$arUser['displayName']}</a><br />
+        <a href="/user/logout/" onclick="logout(); return false">Выход</a>
+    </div>
+    {else}
+
+        <div id="userBox" class="hideme">
+            <a href="#" id="userLink"></a><br />
+            <a href="/user/logout/" onclick="logout(); return false">Выход</a>
+        </div>
+
+    <!--Авторизация -->
+        {if ! isset({$hideLoginBox})}
+    <div id="loginBox">
+        <div class="menuCaption">Авторизация</div>
+        <input id="loginEmail" name="loginEmail" value=""><br />
+        <input type="password" id="loginPwd" name="loginPwd" value=""><br />
+        <input type="button" onclick="login();" value="Войти">
     </div>
 
-    <!--РегистерБокс -->
+
+
+    <!--Регистрация -->
 
     <div id="registerBox">
         <div class="menuCaption showHidden" onclick="showRegisterBox();">Регистрация</div>
-        <div id="registerBoxHidden">
+        <div id="registerBoxHidden" class="hideme">
             email:<br />
             <input id="email" name="email" value=""><br />
             пароль:<br />
@@ -29,9 +47,9 @@
             <input type="password" id="pwd2" name="pwd2" value=""><br />
             <input type="button" onclick="registerNewUser();" value="Зарегестрироваться">
         </div>
-
-
     </div>
+            {/if}
+    {/if}
 
 
     <div class="menuCaption">Корзина</div>

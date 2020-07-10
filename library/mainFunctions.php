@@ -11,3 +11,10 @@ function loadTemplate(Smarty $smarty, string $templateName)
 {
     $smarty->display($templateName . TEMPLATE_POSTFIX);
 }
+
+
+function redirect($url = '/')
+{
+    header("Location: $url");
+    exit();
+}

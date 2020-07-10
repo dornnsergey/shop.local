@@ -65,6 +65,8 @@ function registerNewUser() {
 
                 $('#loginBox').hide();
                 $('#btnSaveOrder').show();
+
+                
             } else {
                 alert(data['message']);
             }
@@ -80,4 +82,104 @@ function getData(obj_form) {
          }
     });
     return hData;
+}
+
+function logout() {
+
+    $.ajax({
+        type: 'POST',
+        url: '/user/logout/',
+        success: function () {
+            window.location.href = "/";
+            $('#registerBox').show();
+            $('#userBox').hide();
+
+            $('#loginBox').show();
+            $('#btnSaveOrder').hide();
+        }
+})
+}
+
+
+function login() {
+    let email = $('#loginEmail').val();
+    let pwd = $('#loginPwd').val();
+    let postData = "email=" + email + "&pwd=" + pwd;
+
+    $.ajax({
+        type: 'POST',
+        url: '/user/login/',
+        data: postData,
+        dataType: 'json',
+        success: function (data) {
+            if (data['success']) {
+                $('#registerBox').hide();
+                $('#loginBox').hide();
+
+                $('#userLink').attr('href', '/user/');
+                $('#userLink').html(data['displayName']);
+                $('#userBox').show();
+                $('#btnSaveOrder').show();
+
+            } else {
+                alert(data['message']);
+            }
+        }
+    })
+}
+
+function showRegisterBox() {
+    $('#registerBoxHidden').toggle();
+}
+
+
+function updateUserData() {
+
+    let phone = $('#newPhone').val();
+    let address = $('#newAddress').val();
+    let pwd1 = $('#newPwd1').val();
+    let pwd2 = $('#newPwd2').val();
+    let curPwd = $('#curPwd').val();
+    let name = $('#newName').val();
+
+    let postData = {phone: phone,
+                    address: address,
+                    pwd1: pwd1,
+                    pwd2: pwd2,
+                    curPwd: curPwd,
+                    name: name};
+
+    $.ajax({
+        type: 'POST',
+        url: '/user/update/',
+        data: postData,
+        dataType: 'json',
+        success: function (data) {
+             if (data['success']) {
+                 $('#userLink').html(data['userName']);
+                 alert(data['message']);
+             } else {
+                 alert(data['message']);
+             }
+        }
+    })
+}
+
+
+function saveOrder() {
+    let postData = getData('form');
+    $.ajax({
+        type: 'Post',
+        url: "/cart/saveorder/",
+        data: postData,
+        dataType: 'json',
+        success: function (data) {
+            if (data['success']) {
+                alert(data['message']);
+                document.location = '/';
+            } else {
+                alert(data['message']);
+            }
+        }
+    })
 }

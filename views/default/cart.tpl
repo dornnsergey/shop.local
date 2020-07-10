@@ -3,6 +3,7 @@
 {if ! $rsProducts}
     В корзине пусто.
   {else}
+    <form action="/cart/order/" method="post">
     <h2>Данные заказа</h2>
         <table>
             <tr>
@@ -31,10 +32,12 @@
                     </span>
                 </td>
                 <td>
-                    <a id="removeCart_{$product['id']}" {if ! $rsProducts} class="hideme" {/if} href="#" onClick="removeFromCart({$product['id']}); return false" alt="Удалить из корзины">Удалить</a>
-                    <a id="addCart_{$product['id']}" {if $rsProducts} class="hideme" {/if} href="#" onClick="addToCart({$product['id']}); return false" alt="Добавить в корзину">Восстановить</a>
+                    <a id="removeCart_{$product['id']}" {if ! $rsProducts} class="hideme" {/if} href="#" onClick="removeFromCart({$product['id']}); return false" title="Удалить из корзины">Удалить</a>
+                    <a id="addCart_{$product['id']}" {if $rsProducts} class="hideme" {/if} href="#" onClick="addToCart({$product['id']}); return false" title="Добавить в корзину">Восстановить</a>
                 </td>
             </tr>
             {/foreach}
         </table>
+    <input type="submit" value="Оформить заказ">
+    </form>
 {/if}

@@ -65,3 +65,47 @@ function checkUserEmail($email, PDO $db)
     return $rs->fetch(2);
 
 }
+
+
+function loginUser($email, $pwd, PDO $db)
+{
+    $sql = "SELECT * FROM users
+                WHERE email='{$email}'";
+
+    $rs = $db->query($sql);
+    $rs = $rs->fetch(2);
+
+    $hash = $rs['pwd'];
+    if (password_verify($pwd, $hash)) {
+        $rs['success'] = 1;
+    } else {
+        $rs['success'] = 0;
+    }
+
+    return $rs;
+}
+
+
+function updateUserData($name, $phone, $address, $pwd1, $pwd2, $curPwd, PDO $db)
+{
+    $email = $_SESSION['user']['email'];
+    $sql = "SELECT pwd FROM users
+            WHERE email='{$email}'";
+    $rs = $db->query($sql);
+    $hash = $rs->fetch(2)['pwd'];
+    if (password_verify($curPwd, $hash)) {
+        $newPwd = null;
+        if ($pwd1 && ($pwd1 == $pwd2)) {
+            $newPwd = password_hash($pwd1, PASSWORD_ARGON2ID);
+        }
+
+        $sql = "UPDATE users SET ";
+        if ($newPwd) {
+            $sql .= "pwd='{$newPwd}', ";
+        }
+        $sql .= "name='{$name}', phone='{$phone}', address='{$address}' WHERE email='{$email}'";
+
+        return $db->query($sql);
+    }
+    return false;
+}
